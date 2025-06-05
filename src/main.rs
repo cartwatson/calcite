@@ -38,7 +38,7 @@ fn main() {
     let mut output_file = File::create(write_file_path).expect("Should have been able to create {write_file_path}");
 
     // grab template file
-    let template_file = fs::read_to_string(template_dir + "index.html").expect("Should have been able to read template file");
+    let template_file = fs::read_to_string(template_dir + "template.html").expect("Should have been able to read template file");
     // break up template write it back to output file
     // TODO: figure out way to not have to add split back to file
     let template_file_split: Vec<_> = template_file.split(&template_splitter).collect();
