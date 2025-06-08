@@ -22,3 +22,8 @@ target/
 
 # ignore nix builds
 result
+
+# ignore testing dirs
+content/
+template/
+out/
