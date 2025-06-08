@@ -1,8 +1,8 @@
 use std::env;
 use std::fs;
 use std::fs::File;
-// use std::io;
 use std::io::prelude::*;
+use std::process::Command;
 
 fn get_first_char(line: &str) -> char {
     for character in line.chars() {
@@ -19,10 +19,21 @@ fn main() {
     let read_file_path = &args[1]; // DEBUG: delete once content_dir works
     // let content_dir: String  = "content/".to_string();
     let template_dir: String = "template/".to_string();
+    let template_file: String = "template.html".to_string();
     let template_splitter: String = "<div id=\"content\">".to_string();
     let output_dir: String   = "out/".to_string();
 
     // TODO: copy over all non-html files from ./template to ./out
+    // V0 copy all files and rm template.html
+    let _ = Command::new("cp").arg("-r").arg(&template_dir).arg(&output_dir).output();
+    let _ = Command::new("rm").arg(output_dir.clone() + &template_file).output();
+
+    // grab template file
+    let template_file = fs::read_to_string(template_dir + &template_file).expect("Should have been able to read template file");
+    // break up template write it back to output file
+    let template_file_split: Vec<_> = template_file.split(&template_splitter).collect();
+    let header: String = template_file_split[0].to_string() + &template_splitter; // TODO: figure out way to not have to add split back to file
+    let footer: String = template_file_split[1].to_string();
 
     // read file in
     // TODO: recursively read all files in from content_dir
@@ -33,22 +44,13 @@ fn main() {
     // WARN: -------------------------------------------------------------------
 
     // write file out
-    let _ = fs::create_dir(&output_dir);
     let write_file_path: String = output_dir + &get_file_name(read_file_path.to_string()) + ".html";
     let mut output_file = File::create(write_file_path).expect("Should have been able to create {write_file_path}");
 
-    // grab template file
-    let template_file = fs::read_to_string(template_dir + "template.html").expect("Should have been able to read template file");
-    // break up template write it back to output file
-    // TODO: figure out way to not have to add split back to file
-    let template_file_split: Vec<_> = template_file.split(&template_splitter).collect();
-    let header: String = template_file_split[0].to_string() + &template_splitter;
-    let footer: String = template_file_split[1].to_string();
     let _ = output_file.write(&header.into_bytes());
 
 //------------------------------------------------------------------------------
 // TODO: FIX THIS SHIT
-// FIX DEBUG WARN WARNING TODO INFO NOTE ANYTHING: 
     // TODO: create stack to hold current state
     // let mut state_stack: Vec<String> = Vec::new();
     let mut content: String = String::new();
@@ -96,6 +98,7 @@ fn heading_processer(line: &str) -> String {
 }
 
 fn paragraph_processer(line: &str) -> String {
+    // TODO: parse for links
     let html = format!("<p>{line}</p>\n");
     return html;
 }
