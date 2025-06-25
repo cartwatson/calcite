@@ -4,6 +4,8 @@ An intentionally basic static site generator written in rust 🦀
 
 ## Usage
 
+### Site Setup
+
 Create two directories for your site, `content` and `template`.
 
 The content directory _must_ include at least one markdown, `.md`, file. The contents and structure of this directory will be copied to the `out/` directory when built.
@@ -40,6 +42,10 @@ Template _must_ include `template.html`, this file must contain a `<div id="cont
 
 </html>
 ```
+
+### Tool Usage
+
+Run `nix run github:cartwatson/rust-ssg` in the directory setup above
 
 ## Goals
 
