@@ -69,6 +69,6 @@ Requires a `test.md` file. Can be any md file but ideally includes a variety of 
 
 ```
   nix develop
-  cargo run -- test.md
+  cargo run -- content/test.md
 ```
 
