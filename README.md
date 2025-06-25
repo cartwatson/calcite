@@ -47,6 +47,8 @@ Template _must_ include `template.html`, this file must contain a `<div id="cont
 
 Run `nix run github:cartwatson/rust-ssg` in the directory setup above
 
+[Security Warning](https://determinate.systems/posts/nix-run/#security-warning)
+
 ## Goals
 
 ### V0
