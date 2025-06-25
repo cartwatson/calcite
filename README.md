@@ -61,6 +61,8 @@ Template _must_ include `template.html`, this file must contain a `<div id="cont
   - inline code
   - code blocks
   - blockquote
+  - images
+  - horizontal lines
 - basic documentation on usage and themeing
 
 ## Development
