@@ -45,9 +45,10 @@ Template _must_ include `template.html`, this file must contain a `<div id="cont
 
 ### Tool Usage
 
+<!-- TODO: put version number at end of command when available, ie `nix run github:cartwatson/rust-ssg/v1.0.0` -->
 Run `nix run github:cartwatson/rust-ssg` in the directory setup above
 
-[Security Warning](https://determinate.systems/posts/nix-run/#security-warning)
+Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#security-warning)
 
 ## Goals
 
