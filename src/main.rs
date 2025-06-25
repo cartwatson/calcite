@@ -3,7 +3,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::process::Command;
 
-// use regex::Regex;
+use regex::Regex;
 
 
 fn get_first_char(line: &str) -> char {
