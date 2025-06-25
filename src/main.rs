@@ -1,8 +1,10 @@
-use std::env;
 use std::fs;
 use std::fs::File;
 use std::io::prelude::*;
 use std::process::Command;
+
+// use regex::Regex;
+
 
 fn get_first_char(line: &str) -> char {
     for character in line.chars() {
@@ -14,9 +16,8 @@ fn get_first_char(line: &str) -> char {
 }
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let read_file_path = &args[1]; // DEBUG: delete once content_dir works
+    // hardcoded variables... 0_0
+    let read_file_path = "content/test.md"; // DEBUG: delete once content_dir works
     // let content_dir: String  = "content/".to_string();
     let template_dir: String = "template/".to_string();
     let template_file: String = "template.html".to_string();
@@ -98,6 +99,8 @@ fn heading_processer(line: &str) -> String {
 }
 
 fn paragraph_processer(line: &str) -> String {
+    // TODO: use regex to filter pattern
+    // let link = format!("<a href=\"{link_target}\">{link_title}</a>\n"); // TODO: if relative link then no target else target=_ to open in a new tab
     // TODO: parse for links
     let html = format!("<p>{line}</p>\n");
     return html;
