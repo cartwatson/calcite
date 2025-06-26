@@ -2,6 +2,10 @@
 
 An intentionally basic static site generator written in rust 🦀 with the help of nix ❄️  
 
+## Why should I use calcite?
+
+Calcite is intended for those who want to build a simple site, with their own template, using vanilla html, css, and javascript.
+
 ## Usage
 
 ### Site Setup
@@ -45,21 +49,30 @@ Template _must_ include `template.html`, this file must contain a `<div id="cont
 
 ### Tool Usage
 
-<!-- TODO: put version number at end of command when available, ie `nix run github:cartwatson/rust-ssg/v1.0.0` -->
-Run `nix run github:cartwatson/rust-ssg` in the directory setup above
+<!-- TODO: put version number at end of command when available, ie `nix run github:cartwatson/calcite/v1.0.0` -->
+Run `nix run github:cartwatson/calcite` in the directory setup above
 
 Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#security-warning), the best way to avoid said security issue is to [pin to a version](https://determinate.systems/posts/nix-run/#using-git-revisions-as-a-versioning-mechanism)
 
 ## Goals
 
 <details>
+<summary>future features</summary>
+<br>
+<ul>
+  <li>[ ] syntax highlighting in codeblocks</li>
+  <li>[ ] easy copy from codeblocks</li>
+  <li>[ ] inline html pass through</li>
+  <li>[ ] standalone html pass through</li>
+  <li>[ ] github action template for easy pages deployment</li>
+</ul>
+</details>
+
+<details>
 <summary>v1.0.0</summary>
 <br>
 <ul>
-  <li>[ ] available on nixpkgs</li>
-    <ul>
-      <li>may count the ability to `nix run github:cartwatson/rust-ssg` as enough...</li>
-    </ul>
+  <li>[ ] available on nixpkgs - may count the ability to `nix run github:cartwatson/calcite` as enough...</li>
   <li>[ ] more rules of CommonMark</li>
     <ul>
       <li>[ ] bold</li>
