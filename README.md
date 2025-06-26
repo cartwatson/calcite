@@ -1,4 +1,4 @@
-# Rust Static Site Generator
+# Calcite
 
 An intentionally basic static site generator written in rust 🦀  
 
@@ -48,7 +48,7 @@ Template _must_ include `template.html`, this file must contain a `<div id="cont
 <!-- TODO: put version number at end of command when available, ie `nix run github:cartwatson/rust-ssg/v1.0.0` -->
 Run `nix run github:cartwatson/rust-ssg` in the directory setup above
 
-Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#security-warning)
+Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#security-warning), the best way to avoid said security issue is to [pin to a version](https://determinate.systems/posts/nix-run/#using-git-revisions-as-a-versioning-mechanism)
 
 ## Goals
 
@@ -59,7 +59,7 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
   - [X] headings
   - [X] paragraphs
   - [X] links
-- [ ] get a good name for the project
+- [X] get a good name for the project
 
 ### V1
 
@@ -84,3 +84,6 @@ Requires a `test.md` file. Can be any md file but ideally includes a variety of 
   cargo run -- content/test.md
 ```
 
+## Naming
+
+Calcite has a PH of 9.91 making it naturally pretty _basic_, also it's a great [minecraft block](https://minecraft.wiki/w/Calcite)
