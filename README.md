@@ -56,20 +56,20 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
 <summary>v1.0.0</summary>
 <br>
 <ul>
-<li>[ ] available on nixpkgs</li>
-  <ul>
-    <li>may count the ability to `nix run github:cartwatson/rust-ssg` as enough...</li>
-  </ul>
-<li>[ ] more rules of CommonMark</li>
-  <ul>
-    <li>[ ] bold</li>
-    <li>[ ] italic</li>
-    <li>[ ] inline code</li>
-    <li>[ ] code blocks</li>
-    <li>[ ] blockquote</li>
-    <li>[ ] images</li>
-    <li>[ ] horizontal lines</li>
-  </ul>
+  <li>[ ] available on nixpkgs</li>
+    <ul>
+      <li>may count the ability to `nix run github:cartwatson/rust-ssg` as enough...</li>
+    </ul>
+  <li>[ ] more rules of CommonMark</li>
+    <ul>
+      <li>[ ] bold</li>
+      <li>[ ] italic</li>
+      <li>[ ] inline code</li>
+      <li>[ ] code blocks</li>
+      <li>[ ] blockquote</li>
+      <li>[ ] images</li>
+      <li>[ ] horizontal lines</li>
+    </ul>
   <li>[X] basic documentation on usage and themeing</li>
 </ul>
 </details>
@@ -93,7 +93,7 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
 
 Requires a `test.md` file. Can be any md file but ideally includes a variety of md components, including nested components (ie code blocks inside blockquotes).
 
-```
+```bash
   nix develop
   cargo run -- content/test.md
 ```
