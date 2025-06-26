@@ -2,6 +2,9 @@ name: "Build legacy Nix package on Ubuntu"
 
 on:
   push:
+    paths:
+      - src/**
+      - .github/workflows/build_nix.yml
 
 jobs:
   build:
