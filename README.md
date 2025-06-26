@@ -54,25 +54,26 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
 
 ### V0
 
-- basic static site generator, can generate a directory that can be hosted as a site
-- adheres to enough rules of CommonMark
-  - headings
-  - paragraphs
-  - links
-- get a good name for the project
+- [ ] basic static site generator, can generate a directory that can be hosted as a site
+- [X] adheres to enough rules of CommonMark
+  - [X] headings
+  - [X] paragraphs
+  - [X] links
+- [ ] get a good name for the project
 
 ### V1
 
-- available on nixpkgs
-- more rules of CommonMark
-  - bold
-  - italic
-  - inline code
-  - code blocks
-  - blockquote
-  - images
-  - horizontal lines
-- basic documentation on usage and themeing
+- [ ] available on nixpkgs
+  - may count the ability to `nix run github:cartwatson/rust-ssg` as enough...
+- [ ] more rules of CommonMark
+  - [ ] bold
+  - [ ] italic
+  - [ ] inline code
+  - [ ] code blocks
+  - [ ] blockquote
+  - [ ] images
+  - [ ] horizontal lines
+- [X] basic documentation on usage and themeing
 
 ## Development
 
