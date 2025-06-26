@@ -5,14 +5,13 @@ use std::process::Command;
 
 use regex::Regex;
 
-
 fn get_first_char(line: &str) -> char {
     for character in line.chars() {
-        if ! character.is_whitespace() {
+        if !character.is_whitespace() {
             return character;
         }
     }
-    return '\n'
+    return '\n';
 }
 
 fn main() {
@@ -22,15 +21,22 @@ fn main() {
     let template_dir: String = "template/".to_string();
     let template_file: String = "template.html".to_string();
     let template_splitter: String = "<div id=\"content\">".to_string();
-    let output_dir: String   = "out/".to_string();
+    let output_dir: String = "out/".to_string();
 
     // TODO: copy over all non-html files from ./template to ./out
     // V0 copy all files and rm template.html
-    let _ = Command::new("cp").arg("-r").arg(&template_dir).arg(&output_dir).output();
-    let _ = Command::new("rm").arg(output_dir.clone() + &template_file).output();
+    let _ = Command::new("cp")
+        .arg("-r")
+        .arg(&template_dir)
+        .arg(&output_dir)
+        .output();
+    let _ = Command::new("rm")
+        .arg(output_dir.clone() + &template_file)
+        .output();
 
     // grab template file
-    let template_file = fs::read_to_string(template_dir + &template_file).expect("Should have been able to read template file");
+    let template_file = fs::read_to_string(template_dir + &template_file)
+        .expect("Should have been able to read template file");
     // break up template write it back to output file
     let template_file_split: Vec<_> = template_file.split(&template_splitter).collect();
     let header: String = template_file_split[0].to_string() + &template_splitter; // TODO: figure out way to not have to add split back to file
@@ -38,7 +44,8 @@ fn main() {
 
     // read file in
     // TODO: recursively read all files in from content_dir
-    let contents = fs::read_to_string(read_file_path).expect("Should have been able to read the file");
+    let contents =
+        fs::read_to_string(read_file_path).expect("Should have been able to read the file");
 
     // WARN: -------------------------------------------------------------------
     // NOTE: everything below should be done recursively for each content file
@@ -46,12 +53,13 @@ fn main() {
 
     // write file out
     let write_file_path: String = output_dir + &get_file_name(read_file_path.to_string()) + ".html";
-    let mut output_file = File::create(write_file_path).expect("Should have been able to create {write_file_path}");
+    let mut output_file =
+        File::create(write_file_path).expect("Should have been able to create {write_file_path}");
 
     let _ = output_file.write(&header.into_bytes());
 
-//------------------------------------------------------------------------------
-// TODO: FIX THIS SHIT
+    //------------------------------------------------------------------------------
+    // TODO: FIX THIS SHIT
     // TODO: create stack to hold current state
     // let mut state_stack: Vec<String> = Vec::new();
     let mut content: String = String::new();
@@ -70,10 +78,10 @@ fn main() {
             // assume the line is regular HTML
             // '<' => content += line,
             // paragraph
-            _   => content += &paragraph_processer(line),
+            _ => content += &paragraph_processer(line),
         }
     }
-//------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
 
     let _ = output_file.write(&content.into_bytes());
     let _ = output_file.write(&footer.into_bytes());
@@ -81,7 +89,12 @@ fn main() {
 
 fn get_file_name(full_name: String) -> String {
     // remove everything before the file name (everything after last '/')
-    let mut temp = full_name.split("/").collect::<Vec<_>>().last().expect("COULDNT SPLIT").to_string();
+    let mut temp = full_name
+        .split("/")
+        .collect::<Vec<_>>()
+        .last()
+        .expect("COULDNT SPLIT")
+        .to_string();
     // remove file extentension (everything before '.')
     temp = temp.split(".").collect::<Vec<_>>()[0].to_string();
 
