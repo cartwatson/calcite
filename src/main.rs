@@ -99,9 +99,16 @@ fn heading_processer(line: &str) -> String {
 }
 
 fn paragraph_processer(line: &str) -> String {
-    // TODO: use regex to filter pattern
-    // let link = format!("<a href=\"{link_target}\">{link_title}</a>\n"); // TODO: if relative link then no target else target=_ to open in a new tab
-    // TODO: parse for links
-    let html = format!("<p>{line}</p>\n");
+    // base case of blank line
+    if line == "" {
+        return line.to_string();
+    }
+
+    // use regex to filter links
+    // [text](link) // no white space in link FYI
+    let links_regex = Regex::new(r"\[(?<text>.*?)\]\((?<link>\S+?)\)").unwrap();
+    let formatted_line = links_regex.replace_all(line, "<a href=\"${link}\">${text}</a> ");
+
+    let html = format!("<p>{formatted_line}</p>\n");
     return html;
 }
