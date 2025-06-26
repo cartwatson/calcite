@@ -1,6 +1,6 @@
 # Calcite
 
-An intentionally basic static site generator written in rust 🦀  
+An intentionally basic static site generator written in rust 🦀 with the help of nix ❄️  
 
 ## Usage
 
@@ -52,28 +52,42 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
 
 ## Goals
 
-### V0
+<details>
+<summary>v1.0.0</summary>
+<br>
+<ul>
+<li>[ ] available on nixpkgs</li>
+  <ul>
+    <li>may count the ability to `nix run github:cartwatson/rust-ssg` as enough...</li>
+  </ul>
+<li>[ ] more rules of CommonMark</li>
+  <ul>
+    <li>[ ] bold</li>
+    <li>[ ] italic</li>
+    <li>[ ] inline code</li>
+    <li>[ ] code blocks</li>
+    <li>[ ] blockquote</li>
+    <li>[ ] images</li>
+    <li>[ ] horizontal lines</li>
+  </ul>
+  <li>[X] basic documentation on usage and themeing</li>
+</ul>
+</details>
 
-- [ ] basic static site generator, can generate a directory that can be hosted as a site
-- [X] adheres to enough rules of CommonMark
-  - [X] headings
-  - [X] paragraphs
-  - [X] links
-- [X] get a good name for the project
-
-### V1
-
-- [ ] available on nixpkgs
-  - may count the ability to `nix run github:cartwatson/rust-ssg` as enough...
-- [ ] more rules of CommonMark
-  - [ ] bold
-  - [ ] italic
-  - [ ] inline code
-  - [ ] code blocks
-  - [ ] blockquote
-  - [ ] images
-  - [ ] horizontal lines
-- [X] basic documentation on usage and themeing
+<details open>
+  <summary>v0.0.0 - beta</summary>
+  <br>
+  <ul>
+    <li>[ ] basic static site generator, can generate a directory that can be hosted as a site</li>
+    <li>[X] adheres to enough rules of CommonMark</li>
+    <ul>
+      <li>[X] headings</li>
+      <li>[X] paragraphs</li>
+      <li>[X] links</li>
+    </ul>
+    <li>[X] get a good name for the project</li>
+  </ul>
+</details>
 
 ## Development
 
@@ -83,6 +97,46 @@ Requires a `test.md` file. Can be any md file but ideally includes a variety of 
   nix develop
   cargo run -- content/test.md
 ```
+
+example `content/test.md`
+
+````markdown
+# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+###### Heading 6
+
+<p>test</p>
+
+> blockquote
+> blockquote with `inline code`
+> blockquote with *bold*
+
+```
+code block
+code block
+code block
+```
+
+- bullet list
+  - bullet list
+- bullet list
+
+1. ordered list
+  2. ordered list
+3. ordered list
+
+regular ***bold + italic* just bold** regular
+regular **bold** regular
+regular *italic* regular
+regular paragraph
+regular paragraph
+
+regular paragraph
+
+````
 
 ## Naming
 
