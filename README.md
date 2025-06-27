@@ -65,6 +65,11 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
   <li>[ ] inline html pass through</li>
   <li>[ ] standalone html pass through</li>
   <li>[ ] github action template for easy pages deployment</li>
+  <li>[ ] more markdown</li>
+  <ul>
+    <li>[ ] unordered lists</li>
+    <li>[ ] ordered lists</li>
+  </ul>
 </ul>
 </details>
 
