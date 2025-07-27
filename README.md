@@ -50,7 +50,7 @@ Template _must_ include `template.html`, this file must contain a `<div id="cont
 ### Tool Usage
 
 <!-- TODO: put version number at end of command when available, ie `nix run github:cartwatson/calcite/v1.0.0` -->
-Run `nix run github:cartwatson/calcite` in the directory setup above
+Run `nix run github:cartwatson/calcite` in the directory you setup above
 
 Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#security-warning), the best way to avoid said security issue is to [pin to a version](https://determinate.systems/posts/nix-run/#using-git-revisions-as-a-versioning-mechanism)
 
@@ -78,7 +78,8 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
 <summary>v1.0.0</summary>
 <br>
 <ul>
-  <li>[ ] available on nixpkgs - may count the ability to `nix run github:cartwatson/calcite` as enough...</li>
+  <li>[X] available on nixpkgs - counting the ability to `nix run github:cartwatson/calcite` as enough...</li>
+  <li>[ ] clean up code architecture, no more hacks</li>
   <li>[ ] more rules of CommonMark</li>
     <ul>
       <li>[ ] bold</li>
@@ -114,7 +115,7 @@ Requires a `test.md` file. Can be any md file but ideally includes a variety of 
 
 ```bash
   nix develop
-  cargo run -- content/test.md
+  nix run
 ```
 
 example `content/test.md`
