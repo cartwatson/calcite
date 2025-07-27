@@ -1,7 +1,9 @@
 [package]
-name = "rust-SSG"
+name = "calcite"
 version = "0.1.0"
 edition = "2024"
+authors = "cartwatson"
+description = "An intentionally basic static site generator written in rust 🦀"
 
 [dependencies]
 regex = "1.11.1"
