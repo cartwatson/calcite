@@ -78,7 +78,7 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
 <summary>v1.0.0</summary>
 <br>
 <ul>
-  <li>[X] available on nixpkgs - counting the ability to `nix run github:cartwatson/calcite` as enough...</li>
+  <li>[X] available on nixpkgs - counting the ability to <code>nix run github:cartwatson/calcite</code> as enough...</li>
   <li>[ ] clean up code architecture, no more hacks</li>
   <li>[ ] if unsuccessful at anypoint, remove any artifacts created</li>
   <li>[ ] more rules of CommonMark</li>
