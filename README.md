@@ -115,8 +115,8 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
 Requires a `test.md` file. Can be any md file but ideally includes a variety of md components, including nested components (ie code blocks inside blockquotes).
 
 ```bash
-  nix develop
-  nix run
+nix develop
+nix run
 ```
 
 example `content/test.md`
