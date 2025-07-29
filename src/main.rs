@@ -45,21 +45,22 @@ fn main() {
         let _ = output_buffer.write(&header.clone().into_bytes());
 
         //------------------------------------------------------------------------------
-        // TODO: V1: FIX THIS SHIT; create stack to hold current state
+        // FIX: V1: create stack to hold current state
         let mut html_content: String = String::new();
         for line in contents.lines() {
             // get to front of line and determine what type of line it is
             let first_char = get_first_char(line);
             match first_char {
                 '#' => html_content += &heading_processer(line),
-                // '-'|'*' => output_file.write_all(b"Bulleted List\n").expect("error writing to file"),
-                // '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' => output_file.write_all(b"Ordered List\n").expect("error writing to file"),
-                // '`' => output_file.write_all(b"Codeblock\n").expect("error writing to file"),
+                // FIX: V1: not single character, needs to be first thing sandwiched in white space (account for ###)
+                // '- ' | '* ' => output_file.write_all(b"Bulleted List\n").expect("error writing to file"), // needs trailing space to prevent collision with italic or bold start to paragraph
+                // '0. ' | '1. ' | '2. ' | '3. ' | '4. ' | '5. ' | '6. ' | '7. ' | '8. ' | '9. ' => output_file.write_all(b"Ordered List\n").expect("error writing to file"),
+                // '```' => output_file.write_all(b"Codeblock\n").expect("error writing to file"),
                 // '>' => output_file.write_all(b"Blockquote\n").expect("error writing to file"),
                 // blank line, empty state_stack completely
                 _ => html_content += &paragraph_processer(line),
                 // '\n' => continue,
-                // '<' => content += line; // assume the line is regular HTML
+                // '<' => content += line; // assume the line is regular HTML // doesn't need any processing
             }
         }
         //------------------------------------------------------------------------------
@@ -98,9 +99,9 @@ fn paragraph_processer(line: &str) -> String {
 
     // TODO: V1:
     // images
-    // bold
-    // italic
-    // inline code
+    // bold   // must not start or end with whitespace; _ doesn't work in word only around
+    // italic // must not start or end with whitespace; _ doesn't work in word only around
+    // inline code // don't mar codeblocks
 
     let html = format!("<p>{formatted_line}</p>\n");
     return html;
