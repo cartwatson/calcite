@@ -4,7 +4,7 @@ An intentionally basic static site generator written in rust 🦀 with the help 
 
 ## Why should I use calcite?
 
-Calcite is intended for those who want to build a simple site, with their own template, using vanilla html, css, and javascript.
+Calcite aims to be a middle ground between deploying a basic html website, like one described in the [html hobbyist](https://www.htmlhobbyist.com/), and a full blown web app like one would create with [vite](https://vite.dev/) or  [electron](https://www.electronjs.org/). Giving users easy and complete control of there themeing while keeping it separate from their content.
 
 ## Usage
 
@@ -60,6 +60,7 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
 <summary>future features</summary>
 <br>
 <ul>
+  <li>[ ] way to pull a theme from github, ie <code>nix run --theme=github:cartwatson/calcite-theme-gruvbox/v1.0.0</code>; aim is to make deployment even more simple</li>
   <li>[ ] syntax highlighting in codeblocks</li>
   <li>[ ] easy copy from codeblocks</li>
   <li>[ ] inline html pass through</li>
