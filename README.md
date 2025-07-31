@@ -4,7 +4,7 @@ An intentionally basic static site generator written in rust 🦀 with the help 
 
 ## Why should I use calcite?
 
-Calcite aims to be a middle ground between deploying a basic html website, like one described in the [html hobbyist](https://www.htmlhobbyist.com/), and a full blown web app like one would create with [vite](https://vite.dev/) or  [electron](https://www.electronjs.org/). Giving users easy and complete control of there themeing while keeping it separate from their content.
+Calcite aims to be a middle ground between deploying a basic html website, like one described in the [html hobbyist](https://www.htmlhobbyist.com/), and wihtout the overhead or complexity of a tool like [hugo](https://gohugo.io/) or [wordpress](https://wordpress.com/). Giving users easy and complete control of their themeing while keeping it separate from their content.
 
 ## Usage
 
