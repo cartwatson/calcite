@@ -21,12 +21,12 @@ fn main() {
     let template_splitter: String = "<div id=\"content\">".to_string();
     let output_dir: String = "out/".to_string();
 
-    // TODO: V1: copy over all non-html files from ./template to ./out
+    // HACK: V1: copy over all non-html files from ./template to ./out
     let _ = Command::new("cp").arg("-r").arg(&template_dir).arg(&output_dir).output();
     let _ = Command::new("rm").arg(output_dir.clone() + &template_file).output();
 
     // grab template file
-    let template_file = fs::read_to_string(template_dir + &template_file).expect("Should have been able to read template file");
+    let template_file = fs::read_to_string(template_dir + &template_file).expect("Should have been able to read template file\n");
     // break up template write it back to output file
     let template_file_split: Vec<_> = template_file.split(&template_splitter).collect();
     let header: String = template_file_split[0].to_string() + &template_splitter; // TODO: figure out way to not have to add split back to file
@@ -34,14 +34,14 @@ fn main() {
 
     // recursively read all files in from content_dir
     for file_name in get_files_recursive(content_dir.clone()) {
-        let read_file_path = content_dir.clone() + &file_name;
-        let write_file_path: String = output_dir.clone() + &remove_extension(read_file_path.to_string()) + ".html";
+        let read_file = content_dir.clone() + &file_name;
+        let write_file_path: String = output_dir.clone() + &remove_extension(file_name.to_string()) + ".html";
 
         // grab .md
-        let contents = fs::read_to_string(read_file_path.clone()).expect("Should have been able to read the file");
+        let contents = fs::read_to_string(read_file.clone()).expect("Should have been able to read the content file\n");
 
         // init out file
-        let mut output_buffer: fs::File = fs::File::create(write_file_path).expect("Should have been able to create {write_file_path}");
+        let mut output_buffer: fs::File = fs::File::create(write_file_path).expect("Should have been able to write output file\n");
         let _ = output_buffer.write(&header.clone().into_bytes());
 
         //------------------------------------------------------------------------------
@@ -107,7 +107,8 @@ fn paragraph_processer(line: &str) -> String {
     return html;
 }
 
-fn get_files_recursive(base_dir: String) -> Vec<String> {
+fn get_files_recursive(_base_dir: String) -> Vec<String> {
+    // DEBUG: rm _ from arg
     // TODO: V0: recursively read all files in from content_dir
     // input "content/"
     //
@@ -126,7 +127,7 @@ fn get_files_recursive(base_dir: String) -> Vec<String> {
     // NOTE: do NOT return "content/" in file name
 
     let mut entries: Vec<String> = vec![];
-    entries.push("content/index.md".to_string()); // DEBUG
+    entries.push("index.md".to_string()); // DEBUG
     // let temp = fs::read_dir(base_dir);
     // entries.sort();
     return entries;
