@@ -125,8 +125,9 @@ fn get_files_recursive(base_dir: String) -> Vec<String> {
     //
     // NOTE: do NOT return "content/" in file name
 
-    let entries: Vec<String> = vec![];
+    let mut entries: Vec<String> = vec![];
+    entries.push("content/index.md".to_string()); // DEBUG
     // let temp = fs::read_dir(base_dir);
-    // // entries.sort();
+    // entries.sort();
     return entries;
 }
