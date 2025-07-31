@@ -62,6 +62,7 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
 <ul>
   <li>[ ] way to pull a theme from github, ie <code>nix run --theme=github:cartwatson/calcite-theme-gruvbox/v1.0.0</code>; aim is to make deployment even more simple</li>
   <li>[ ] syntax highlighting in codeblocks</li>
+  <li>[ ] allow template files in sub directories; eg <code>blog/template.html</code></li>
   <li>[ ] easy copy from codeblocks</li>
   <li>[ ] inline html pass through</li>
   <li>[ ] standalone html pass through</li>
