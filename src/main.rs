@@ -1,4 +1,4 @@
-use std::fs;
+use std::fs::{self, read_dir};
 use std::io::Write;
 use std::process::Command;
 
@@ -107,7 +107,7 @@ fn paragraph_processer(line: &str) -> String {
     return html;
 }
 
-fn get_files_recursive(_base_dir: String) -> Vec<String> {
+fn get_files_recursive(base_dir: String) -> Vec<String> {
     // DEBUG: rm _ from arg
     // TODO: V0: recursively read all files in from content_dir
     // input "content/"
@@ -126,9 +126,24 @@ fn get_files_recursive(_base_dir: String) -> Vec<String> {
     //
     // NOTE: do NOT return "content/" in file name
 
-    let mut entries: Vec<String> = vec![];
-    entries.push("index.md".to_string()); // DEBUG
-    // let temp = fs::read_dir(base_dir);
-    // entries.sort();
-    return entries;
+    // grab everything inside base_dir
+    // if dir add to dir to visit
+    //     run this function recursively
+    // if file, push onto entries
+
+    let mut files: Vec<String> = vec![];
+    let mut dir_to_visit: Vec<String> = vec![];
+    for entry in read_dir(base_dir) {
+        if entry.is_dir() {
+            let sub_files = get_files_recursive(entry);
+            for sub_file in sub_files {
+                files.push(sub_file);
+            }
+        } else {
+            files.push(entry) // make this a string
+        }
+    }
+    files.push("index.md".to_string()); // DEBUG
+    files.sort();
+    return files;
 }
