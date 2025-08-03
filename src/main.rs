@@ -1,6 +1,7 @@
 use regex::Regex;
 use std::fs::{self, File};
 use std::io::Write;
+use std::path::Path;
 use std::process::Command;
 
 fn get_first_char(line: &str) -> char {
@@ -14,11 +15,12 @@ fn get_first_char(line: &str) -> char {
 
 fn main() {
     // TODO: V1: hardcoded variables... 0_0
+    // TODO: V0: convert to paths
     let content_dir: String = "content/".to_string();
     let template_dir: String = "template/".to_string();
     let template_file: String = "template.html".to_string();
-    let template_splitter: String = "<div id=\"content\">".to_string();
     let output_dir: String = "out/".to_string();
+    let template_splitter: String = "<div id=\"content\">".to_string();
 
     // HACK: V1: copy over all non-html files from ./template to ./out
     let _ = Command::new("cp").arg("-r").arg(&template_dir).arg(&output_dir).output();
@@ -31,21 +33,21 @@ fn main() {
     let header: String = template_file_split[0].to_string() + &template_splitter; // TODO: figure out way to not have to add split back to file
     let footer: String = template_file_split[1].to_string();
 
-    // recursively read all files in from content_dir
-    let files = get_files_recursive(content_dir.clone());
+    let files = get_files_recursive(content_dir.clone()); // DEBUG, put inline with `for file_path` when done debug
     dbg!(&files); // DEBUG
-    for file_name in files {
-        let read_file = content_dir.clone() + &file_name;
-        let write_file_path: String = output_dir.clone() + &remove_extension(file_name.to_string()) + ".html";
+    for file_path in files {
+        let write_file_path = Path::new(&output_dir)
+            .join(file_path.strip_prefix(&content_dir).expect("unable to remove `content/` from path"))
+            .with_extension("html");
 
         // grab .md
-        let contents = fs::read_to_string(read_file.clone()).expect("Should have been able to read the content file\n");
+        let contents = fs::read_to_string(&file_path).expect("Should have been able to read the content file\n");
 
         // init out file
         dbg!(&write_file_path); // DEBUG
         // ERROR: will fail to write if directory doesn't exist
-        let mut output_buffer: fs::File = create_file(write_file_path);
-        let _ = output_buffer.write(&header.clone().into_bytes()).expect("Unable to write to output file");
+        let mut output_file: fs::File = create_file(write_file_path.as_path());
+        let _ = output_file.write(&header.clone().into_bytes()).expect("Unable to write to output file");
 
         //------------------------------------------------------------------------------
         // FIX: V1: create stack to hold current state
@@ -68,14 +70,9 @@ fn main() {
         }
         //------------------------------------------------------------------------------
 
-        let _ = output_buffer.write(&html_content.into_bytes());
-        let _ = output_buffer.write(&footer.clone().into_bytes());
+        let _ = output_file.write(&html_content.into_bytes());
+        let _ = output_file.write(&footer.clone().into_bytes());
     }
-}
-
-fn remove_extension(full_name: String) -> String {
-    // remove file extentension (everything before '.')
-    return full_name.split(".").collect::<Vec<_>>()[0].to_string(); // HACK: V1: fix
 }
 
 fn heading_processer(line: &str) -> String {
@@ -111,7 +108,6 @@ fn paragraph_processer(line: &str) -> String {
 }
 
 fn get_files_recursive(base_dir: String) -> Vec<String> {
-    // TODO: V0: recursively read all files in from content_dir
     // input "content/"
     // eg file structure
     //
@@ -128,7 +124,7 @@ fn get_files_recursive(base_dir: String) -> Vec<String> {
     //   test.md
     // ]
     //
-    // NOTE: do NOT return "content/" in file name
+    // NOTE: return full local path; include "content/" in file name
 
     let mut files: Vec<String> = vec![];
     for entry in fs::read_dir(base_dir.clone()).expect("Unable to read provided content directory") {
@@ -143,9 +139,7 @@ fn get_files_recursive(base_dir: String) -> Vec<String> {
                 files.push(file);
             }
         } else {
-            // HACK: V1: hardcoded "content/"
-            let sanitized_path = path.strip_prefix("content/").expect("unable to remove \"content/\" from path");
-            files.push(sanitized_path.display().to_string());
+            files.push(path.display().to_string());
         }
     }
 
@@ -153,7 +147,7 @@ fn get_files_recursive(base_dir: String) -> Vec<String> {
     return files;
 }
 
-fn create_file(file_path: String) -> fs::File {
-    // TODO: V0: error handling for dir creation
+fn create_file(file_path: &Path) -> fs::File {
+    // TODO: V0: error handling for dirs that don't exist
     return File::create(file_path).expect("Should have been able to write output file\n");
 }
