@@ -1,8 +1,7 @@
-use std::fs::{self, read_dir};
+use regex::Regex;
+use std::fs::{self, File};
 use std::io::Write;
 use std::process::Command;
-
-use regex::Regex;
 
 fn get_first_char(line: &str) -> char {
     for character in line.chars() {
@@ -33,7 +32,9 @@ fn main() {
     let footer: String = template_file_split[1].to_string();
 
     // recursively read all files in from content_dir
-    for file_name in get_files_recursive(content_dir.clone()) {
+    let files = get_files_recursive(content_dir.clone());
+    dbg!(&files); // DEBUG
+    for file_name in files {
         let read_file = content_dir.clone() + &file_name;
         let write_file_path: String = output_dir.clone() + &remove_extension(file_name.to_string()) + ".html";
 
@@ -41,8 +42,10 @@ fn main() {
         let contents = fs::read_to_string(read_file.clone()).expect("Should have been able to read the content file\n");
 
         // init out file
-        let mut output_buffer: fs::File = fs::File::create(write_file_path).expect("Should have been able to write output file\n");
-        let _ = output_buffer.write(&header.clone().into_bytes());
+        dbg!(&write_file_path); // DEBUG
+        // ERROR: will fail to write if directory doesn't exist
+        let mut output_buffer: fs::File = create_file(write_file_path);
+        let _ = output_buffer.write(&header.clone().into_bytes()).expect("Unable to write to output file");
 
         //------------------------------------------------------------------------------
         // FIX: V1: create stack to hold current state
@@ -108,9 +111,9 @@ fn paragraph_processer(line: &str) -> String {
 }
 
 fn get_files_recursive(base_dir: String) -> Vec<String> {
-    // DEBUG: rm _ from arg
     // TODO: V0: recursively read all files in from content_dir
     // input "content/"
+    // eg file structure
     //
     // content/
     // ├── blog
@@ -118,7 +121,8 @@ fn get_files_recursive(base_dir: String) -> Vec<String> {
     // │   └── article2.md
     // └── test.md
     //
-    // returns [
+    // returns
+    // [
     //   blog/article1.md
     //   blog/article2.md
     //   test.md
@@ -126,24 +130,30 @@ fn get_files_recursive(base_dir: String) -> Vec<String> {
     //
     // NOTE: do NOT return "content/" in file name
 
-    // grab everything inside base_dir
-    // if dir add to dir to visit
-    //     run this function recursively
-    // if file, push onto entries
-
     let mut files: Vec<String> = vec![];
-    let mut dir_to_visit: Vec<String> = vec![];
-    for entry in read_dir(base_dir) {
-        if entry.is_dir() {
-            let sub_files = get_files_recursive(entry);
-            for sub_file in sub_files {
-                files.push(sub_file);
+    for entry in fs::read_dir(base_dir.clone()).expect("Unable to read provided content directory") {
+        // HACK: V2: handle non-UTF8 enconded paths better
+        // path.display().to_string() is a hack, taken from [here](https://stackoverflow.com/a/61142928)
+
+        let entry = entry.expect("Unable to convert from ReadDir to DirEntry while obtaining content files");
+        let path = entry.path();
+        if path.is_dir() {
+            let more_files = get_files_recursive(path.display().to_string());
+            for file in more_files {
+                files.push(file);
             }
         } else {
-            files.push(entry) // make this a string
+            // HACK: V1: hardcoded "content/"
+            let sanitized_path = path.strip_prefix("content/").expect("unable to remove \"content/\" from path");
+            files.push(sanitized_path.display().to_string());
         }
     }
-    files.push("index.md".to_string()); // DEBUG
+
     files.sort();
     return files;
+}
+
+fn create_file(file_path: String) -> fs::File {
+    // TODO: V0: error handling for dir creation
+    return File::create(file_path).expect("Should have been able to write output file\n");
 }
