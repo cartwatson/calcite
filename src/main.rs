@@ -4,18 +4,9 @@ use std::io::Write;
 use std::path::Path;
 use std::process::Command;
 
-fn get_first_char(line: &str) -> char {
-    for character in line.chars() {
-        if !character.is_whitespace() {
-            return character;
-        }
-    }
-    return '\n';
-}
-
 fn main() {
     // TODO: V1: hardcoded variables... 0_0
-    // TODO: V0: convert to paths
+    // TODO: V1: convert to paths
     let content_dir: String = "content/".to_string();
     let template_dir: String = "template/".to_string();
     let template_file: String = "template.html".to_string();
@@ -23,6 +14,7 @@ fn main() {
     let template_splitter: String = "<div id=\"content\">".to_string();
 
     // HACK: V1: copy over all non-html files from ./template to ./out
+    // TODO: V1: allow multiple template files, in subdir (ie blog has a different template)
     let _ = Command::new("cp").arg("-r").arg(&template_dir).arg(&output_dir).output();
     let _ = Command::new("rm").arg(output_dir.clone() + &template_file).output();
 
@@ -36,16 +28,22 @@ fn main() {
     let files = get_files_recursive(content_dir.clone()); // DEBUG, put inline with `for file_path` when done debug
     dbg!(&files); // DEBUG
     for file_path in files {
-        let write_file_path = Path::new(&output_dir)
-            .join(file_path.strip_prefix(&content_dir).expect("unable to remove `content/` from path"))
-            .with_extension("html");
+        let mut write_file_path = Path::new(&output_dir).join(file_path.strip_prefix(&content_dir).expect("unable to remove `content/` from path"));
+
+        if Path::new(&file_path).extension().expect("Unable to get file extension") != "md" {
+            dbg!(&write_file_path);
+            // HACK: V1: figure out better way to copy files
+            let _ = Command::new("cp").arg("-r").arg(&file_path).arg(&write_file_path).output();
+            continue;
+        } else {
+            write_file_path = write_file_path.with_extension("html");
+        }
 
         // grab .md
         let contents = fs::read_to_string(&file_path).expect("Should have been able to read the content file\n");
 
         // init out file
         dbg!(&write_file_path); // DEBUG
-        // ERROR: will fail to write if directory doesn't exist
         let mut output_file: fs::File = create_file(write_file_path.as_path());
         let _ = output_file.write(&header.clone().into_bytes()).expect("Unable to write to output file");
 
@@ -73,6 +71,15 @@ fn main() {
         let _ = output_file.write(&html_content.into_bytes());
         let _ = output_file.write(&footer.clone().into_bytes());
     }
+}
+
+fn get_first_char(line: &str) -> char {
+    for character in line.chars() {
+        if !character.is_whitespace() {
+            return character;
+        }
+    }
+    return '\n';
 }
 
 fn heading_processer(line: &str) -> String {
@@ -119,9 +126,9 @@ fn get_files_recursive(base_dir: String) -> Vec<String> {
     //
     // returns
     // [
-    //   blog/article1.md
-    //   blog/article2.md
-    //   test.md
+    //   content/blog/article1.md
+    //   content/blog/article2.md
+    //   content/test.md
     // ]
     //
     // NOTE: return full local path; include "content/" in file name
@@ -148,6 +155,11 @@ fn get_files_recursive(base_dir: String) -> Vec<String> {
 }
 
 fn create_file(file_path: &Path) -> fs::File {
-    // TODO: V0: error handling for dirs that don't exist
+    // strip filename from path
+    let dir_path: &Path = file_path.parent().expect("Unable to get parent");
+    if !dir_path.try_exists().expect("Unable to verify existance of dir_path during directory creation") {
+        // FIX: V0: will error if creating /exists/doesntexist/doesntexist/file.txt
+        let _ = fs::create_dir_all(dir_path).expect("Unable to create dir");
+    }
     return File::create(file_path).expect("Should have been able to write output file\n");
 }
