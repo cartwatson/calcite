@@ -97,8 +97,15 @@ fn paragraph_processer(line: &str) -> String {
     // use regex to filter links
     //
     // [text](link) // no white space in link FYI
-    let links_regex = Regex::new(r"\[(?<text>.*?)\]\((?<link>\S+?)\)").unwrap();
-    let formatted_line = links_regex.replace_all(line, "<a href=\"${link}\">${text}</a> "); // TODO: V1: add target="_"; internal links redirecter, external pages send to new tab
+    // HACK: V1: this is ugly: make this a loop or something, vec or regexes that all fire for every line
+    let https_links_regex = Regex::new(r"\[(?<text>.*?)\]\((?<link>https:\/\/\S+?)\)").unwrap();
+    let formatted_line = https_links_regex.replace_all(line, "<a target=\"_blank\" href=\"${link}\">${text}</a> ");
+
+    let md_to_html_regex = Regex::new(r".md\)").unwrap();
+    let final_formatted_line = md_to_html_regex.replace_all(formatted_line.as_ref(), ".html)");
+
+    let local_links_regex = Regex::new(r"\[(?<text>.*?)\]\((?<link>\S+?(.md|.html))\)").unwrap();
+    let final_final_formatted_line = local_links_regex.replace_all(final_formatted_line.as_ref(), "<a href=\"${link}\">${text}</a> ");
 
     // TODO: V1:
     // images
@@ -106,7 +113,7 @@ fn paragraph_processer(line: &str) -> String {
     // italic // must not start or end with whitespace; _ doesn't work in word only around
     // inline code // don't mar codeblocks
 
-    let html = format!("<p>{formatted_line}</p>\n");
+    let html = format!("<p>{final_final_formatted_line}</p>\n");
     return html;
 }
 
