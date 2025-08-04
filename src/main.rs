@@ -25,13 +25,10 @@ fn main() {
     let header: String = template_file_split[0].to_string() + &template_splitter; // TODO: figure out way to not have to add split back to file
     let footer: String = template_file_split[1].to_string();
 
-    let files = get_files_recursive(content_dir.clone()); // DEBUG, put inline with `for file_path` when done debug
-    dbg!(&files); // DEBUG
-    for file_path in files {
+    for file_path in get_files_recursive(content_dir.clone()) {
         let mut write_file_path = Path::new(&output_dir).join(file_path.strip_prefix(&content_dir).expect("unable to remove `content/` from path"));
 
         if Path::new(&file_path).extension().expect("Unable to get file extension") != "md" {
-            dbg!(&write_file_path);
             // HACK: V1: figure out better way to copy files
             let _ = Command::new("cp").arg("-r").arg(&file_path).arg(&write_file_path).output();
             continue;
@@ -43,7 +40,6 @@ fn main() {
         let contents = fs::read_to_string(&file_path).expect("Should have been able to read the content file\n");
 
         // init out file
-        dbg!(&write_file_path); // DEBUG
         let mut output_file: fs::File = create_file(write_file_path.as_path());
         let _ = output_file.write(&header.clone().into_bytes()).expect("Unable to write to output file");
 
@@ -158,7 +154,6 @@ fn create_file(file_path: &Path) -> fs::File {
     // strip filename from path
     let dir_path: &Path = file_path.parent().expect("Unable to get parent");
     if !dir_path.try_exists().expect("Unable to verify existance of dir_path during directory creation") {
-        // FIX: V0: will error if creating /exists/doesntexist/doesntexist/file.txt
         let _ = fs::create_dir_all(dir_path).expect("Unable to create dir");
     }
     return File::create(file_path).expect("Should have been able to write output file\n");
