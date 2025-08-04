@@ -95,27 +95,61 @@ fn paragraph_processer(line: &str) -> String {
         return line.to_string();
     }
 
-    // use regex to filter links
-    //
-    // [text](link) // no white space in link FYI
-    // HACK: V1: this is ugly: make this a loop or something, vec or regexes that all fire for every line
-    let https_links_regex = Regex::new(r"\[(?<text>.*?)\]\((?<link>https:\/\/\S+?)\)").unwrap();
-    let formatted_line = https_links_regex.replace_all(line, "<a target=\"_blank\" href=\"${link}\">${text}</a> ");
+    // use regex to filter images, bold, italic, inline code, relative links, and https links
+    let regexes_and_targets: Vec<(Regex, &str)> = vec![
+        // HACK: V1: order matters
+        (
+            // images - relative
+            Regex::new(r"!\[(?<about>.*?)\]\((?<link>\S+?(.md|.html))\)").unwrap(),
+            "<img src=\"${link}\" alt=\"${about}\"></img> ",
+        ),
+        (
+            // images - web
+            Regex::new(r"!\[(?<about>.*?)\]\((?<link>https:\/\/\S+?)\)").unwrap(),
+            "<img src=\"${link}\" alt=\"${about}\"></img> ",
+        ),
+        (
+            // bold
+            Regex::new(r"(\*\*|__|\*_|_\*)(?<word>\S.+\S)(\*\*|__|\*_|_\*)").unwrap(),
+            "<em>${word}</em>",
+        ),
+        (
+            // italic
+            Regex::new(r"(\*|_)(?<word>\S.+\S)(\*|_)").unwrap(),
+            "<i>${word}</i>",
+        ),
+        (
+            // inline code
+            Regex::new(r"(\`)(?<word>\S.+\S)(\`)").unwrap(),
+            "<code>${word}</code>",
+        ),
+        (
+            // https links
+            Regex::new(r"\[(?<text>.*?)\]\((?<link>https:\/\/\S+?)\)").unwrap(),
+            "<a target=\"_blank\" href=\"${link}\">${text}</a> ",
+        ),
+        (
+            // converts local .md to .html
+            Regex::new(r".md\)").unwrap(),
+            ".html)",
+        ),
+        (
+            // converts local .html to valid links for the dir
+            Regex::new(r"\[(?<text>.*?)\]\((?<link>\S+?(.md|.html))\)").unwrap(),
+            "<a href=\"${link}\">${text}</a> ",
+        ),
+    ];
 
-    let md_to_html_regex = Regex::new(r".md\)").unwrap();
-    let final_formatted_line = md_to_html_regex.replace_all(formatted_line.as_ref(), ".html)");
+    let mut formatted_line: String = line.to_owned();
+    for tuple in regexes_and_targets {
+        let regex: Regex = tuple.0;
+        let target: &str = tuple.1;
 
-    let local_links_regex = Regex::new(r"\[(?<text>.*?)\]\((?<link>\S+?(.md|.html))\)").unwrap();
-    let final_final_formatted_line = local_links_regex.replace_all(final_formatted_line.as_ref(), "<a href=\"${link}\">${text}</a> ");
+        let temp: String = regex.replace_all(&formatted_line, target).into_owned();
+        formatted_line = temp.clone();
+    }
 
-    // TODO: V1:
-    // images
-    // bold   // must not start or end with whitespace; _ doesn't work in word only around
-    // italic // must not start or end with whitespace; _ doesn't work in word only around
-    // inline code // don't mar codeblocks
-
-    let html = format!("<p>{final_final_formatted_line}</p>\n");
-    return html;
+    return format!("<p>{formatted_line}</p>\n");
 }
 
 fn get_files_recursive(base_dir: String) -> Vec<String> {
