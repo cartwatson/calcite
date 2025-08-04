@@ -68,6 +68,7 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
   <li>[ ] standalone html pass through</li>
   <li>[ ] github action template for easy pages deployment</li>
   <li>[ ] correct indentation on html files</li>
+  <li>[ ] debug mode/better logging</li>
   <li>[ ] more markdown</li>
   <ul>
     <li>[ ] unordered lists</li>
@@ -83,6 +84,7 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
   <li>[X] available on nixpkgs - counting the ability to <code>nix run github:cartwatson/calcite</code> as enough...</li>
   <li>[ ] clean up code architecture, no more hacks</li>
   <li>[ ] if unsuccessful at anypoint, remove any artifacts created</li>
+  <li>[ ] prompt remove output dir if it exists</li>
   <li>[ ] more rules of CommonMark</li>
     <ul>
       <li>[ ] bold</li>
