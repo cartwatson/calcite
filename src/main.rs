@@ -56,6 +56,7 @@ fn main() {
                 // '0. ' | '1. ' | '2. ' | '3. ' | '4. ' | '5. ' | '6. ' | '7. ' | '8. ' | '9. ' => output_file.write_all(b"Ordered List\n").expect("error writing to file"),
                 // '```' => output_file.write_all(b"Codeblock\n").expect("error writing to file"),
                 // '>' => output_file.write_all(b"Blockquote\n").expect("error writing to file"),
+                '-' => html_content += "<hr>\n",
                 // blank line, empty state_stack completely
                 _ => html_content += &paragraph_processer(line),
                 // '\n' => continue,
