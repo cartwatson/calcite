@@ -87,13 +87,13 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
   <li>[ ] prompt remove output dir if it exists</li>
   <li>[ ] more rules of CommonMark</li>
     <ul>
-      <li>[ ] bold</li>
-      <li>[ ] italic</li>
-      <li>[ ] inline code</li>
+      <li>[X] bold</li>
+      <li>[X] italic</li>
+      <li>[X] inline code</li>
       <li>[ ] code blocks</li>
       <li>[ ] blockquote</li>
-      <li>[ ] images</li>
-      <li>[ ] horizontal lines</li>
+      <li>[X] images</li>
+      <li>[X] horizontal lines</li>
     </ul>
   <li>[X] basic documentation on usage and themeing</li>
 </ul>
@@ -103,7 +103,7 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
   <summary>v0.0.0 - beta</summary>
   <br>
   <ul>
-    <li>[ ] basic static site generator, can generate a directory that can be hosted as a site</li>
+    <li>[X] basic static site generator, can generate a directory that can be hosted as a site</li>
     <li>[X] adheres to enough rules of CommonMark</li>
     <ul>
       <li>[X] headings</li>
