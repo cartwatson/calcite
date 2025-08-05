@@ -77,7 +77,7 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
 </ul>
 </details>
 
-<details>
+<details open>
 <summary>v1.0.0</summary>
 <br>
 <ul>
@@ -99,11 +99,11 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
 </ul>
 </details>
 
-<details open>
+<details>
   <summary>v0.0.0 - beta</summary>
   <br>
   <ul>
-    <li>[ ] basic static site generator, can generate a directory that can be hosted as a site</li>
+    <li>[X] basic static site generator, can generate a directory that can be hosted as a site</li>
     <li>[X] adheres to enough rules of CommonMark</li>
     <ul>
       <li>[X] headings</li>
