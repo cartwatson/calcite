@@ -77,7 +77,7 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
 </ul>
 </details>
 
-<details>
+<details open>
 <summary>v1.0.0</summary>
 <br>
 <ul>
@@ -99,7 +99,7 @@ Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#securit
 </ul>
 </details>
 
-<details open>
+<details>
   <summary>v0.0.0 - beta</summary>
   <br>
   <ul>
