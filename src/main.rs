@@ -95,9 +95,10 @@ fn paragraph_processer(line: &str) -> String {
         return line.to_string();
     }
 
-    // use regex to filter images, bold, italic, inline code, relative links, and https links
+    // FIX: V1: can't handle the following
+    // *just italic****bold italic* just bold**
     let regexes_and_targets: Vec<(Regex, &str)> = vec![
-        // HACK: V1: order matters
+        // HACK: order matters!
         (
             // images - relative
             Regex::new(r"!\[(?<about>.*?)\]\((?<link>\S+?(.md|.html))\)").unwrap(),
@@ -111,7 +112,7 @@ fn paragraph_processer(line: &str) -> String {
         (
             // bold
             Regex::new(r"(\*\*|__|\*_|_\*)(?<word>\S.+\S)(\*\*|__|\*_|_\*)").unwrap(),
-            "<em>${word}</em>",
+            "<strong>${word}</strong>",
         ),
         (
             // italic
