@@ -51,6 +51,7 @@ fn main() {
             let first_char = get_first_char(line);
             match first_char {
                 '#' => html_content += &heading_processer(line),
+                '!' => html_content += &image_processer(line),
                 // FIX: V1: not single character, needs to be first thing sandwiched in white space (account for ###)
                 // '- ' | '* ' => output_file.write_all(b"Bulleted List\n").expect("error writing to file"), // needs trailing space to prevent collision with italic or bold start to paragraph
                 // '0. ' | '1. ' | '2. ' | '3. ' | '4. ' | '5. ' | '6. ' | '7. ' | '8. ' | '9. ' => output_file.write_all(b"Ordered List\n").expect("error writing to file"),
@@ -79,6 +80,33 @@ fn get_first_char(line: &str) -> char {
     return '\n';
 }
 
+fn image_processer(line: &str) -> String {
+    let regexes_and_targets: Vec<(Regex, &str)> = vec![
+        // HACK: order matters!
+        (
+            // images - relative
+            Regex::new(r"!\[(?<about>.*?)\]\((?<link>.+?)\)").unwrap(),
+            "<img src=\"${link}\" alt=\"${about}\"></img> ",
+        ),
+        (
+            // images - web
+            Regex::new(r"!\[(?<about>.*?)\]\((?<link>https:\/\/\S+?)\)").unwrap(),
+            "<img src=\"${link}\" alt=\"${about}\"></img> ",
+        ),
+    ];
+
+    let mut formatted_line: String = line.to_owned();
+    for tuple in regexes_and_targets {
+        let regex: Regex = tuple.0;
+        let target: &str = tuple.1;
+
+        let temp: String = regex.replace_all(&formatted_line, target).into_owned();
+        formatted_line = temp.clone();
+    }
+
+    return formatted_line;
+}
+
 fn heading_processer(line: &str) -> String {
     // correlate heading level to html tag
     let mut split_line = line.split(' ').collect::<Vec<_>>();
@@ -99,16 +127,6 @@ fn paragraph_processer(line: &str) -> String {
     // *just italic****bold italic* just bold**
     let regexes_and_targets: Vec<(Regex, &str)> = vec![
         // HACK: order matters!
-        (
-            // images - relative
-            Regex::new(r"!\[(?<about>.*?)\]\((?<link>\S+?(.md|.html))\)").unwrap(),
-            "<img src=\"${link}\" alt=\"${about}\"></img> ",
-        ),
-        (
-            // images - web
-            Regex::new(r"!\[(?<about>.*?)\]\((?<link>https:\/\/\S+?)\)").unwrap(),
-            "<img src=\"${link}\" alt=\"${about}\"></img> ",
-        ),
         (
             // bold
             Regex::new(r"(\*\*|__|\*_|_\*)(?<word>\S.+\S)(\*\*|__|\*_|_\*)").unwrap(),
