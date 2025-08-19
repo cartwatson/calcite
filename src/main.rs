@@ -47,21 +47,44 @@ fn main() {
         // FIX: V1: create stack to hold current state
         let mut html_content: String = String::new();
         for line in contents.lines() {
+            // base cases
+            match line {
+                "" => {
+                    continue;
+                }
+                "---" => {
+                    html_content += "<hr>\n";
+                    continue;
+                }
+                _ => (), // continue processing
+            }
+
             // get to front of line and determine what type of line it is
             let first_char = get_first_char(line);
             match first_char {
+                // heading
                 '#' => html_content += &heading_processer(line),
+
+                // images
                 '!' => html_content += &image_processer(line),
-                // FIX: V1: not single character, needs to be first thing sandwiched in white space (account for ###)
-                // '- ' | '* ' => output_file.write_all(b"Bulleted List\n").expect("error writing to file"), // needs trailing space to prevent collision with italic or bold start to paragraph
-                // '0. ' | '1. ' | '2. ' | '3. ' | '4. ' | '5. ' | '6. ' | '7. ' | '8. ' | '9. ' => output_file.write_all(b"Ordered List\n").expect("error writing to file"),
+
+                // unordered list
+                // '-' | '*' => output_file.write_all(b"Bulleted List\n").expect("error writing to file"), // needs trailing space to prevent collision with italic or bold start to paragraph
+
+                // ordered list
+                // '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => output_file.write_all(b"Ordered List\n").expect("error writing to file"),
+
+                // code block (need way to distinguish here)
                 // '```' => output_file.write_all(b"Codeblock\n").expect("error writing to file"),
+
+                //  blockquote
                 // '>' => output_file.write_all(b"Blockquote\n").expect("error writing to file"),
-                '-' => html_content += "<hr>\n",
+
+                // assume the line is regular HTML // doesn't need any processing
+                '<' => html_content += line,
+
                 // blank line, empty state_stack completely
                 _ => html_content += &paragraph_processer(line),
-                // '\n' => continue,
-                // '<' => content += line; // assume the line is regular HTML // doesn't need any processing
             }
         }
         //------------------------------------------------------------------------------
@@ -118,11 +141,6 @@ fn heading_processer(line: &str) -> String {
 }
 
 fn paragraph_processer(line: &str) -> String {
-    // base case of blank line
-    if line == "" {
-        return line.to_string();
-    }
-
     // FIX: V1: can't handle the following
     // *just italic****bold italic* just bold**
     let regexes_and_targets: Vec<(Regex, &str)> = vec![
