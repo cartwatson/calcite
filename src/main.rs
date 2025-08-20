@@ -109,12 +109,12 @@ fn image_processer(line: &str) -> String {
         (
             // images - relative
             Regex::new(r"!\[(?<about>.*?)\]\((?<link>.+?)\)").unwrap(),
-            "<img src=\"${link}\" alt=\"${about}\"></img> ",
+            "<img src=\"${link}\" alt=\"${about}\" title=\"${about}\"></img> ",
         ),
         (
             // images - web
             Regex::new(r"!\[(?<about>.*?)\]\((?<link>https:\/\/\S+?)\)").unwrap(),
-            "<img src=\"${link}\" alt=\"${about}\"></img> ",
+            "<img src=\"${link}\" alt=\"${about}\" title=\"${about}\"></img> ",
         ),
     ];
 
