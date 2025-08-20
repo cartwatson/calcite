@@ -113,6 +113,7 @@ Create a `template/template.html` file as described [here](#site-setup)
 <br>
 <ul>
   <li>[ ] way to pull a theme from github, ie <code>nix run --theme=github:cartwatson/calcite-theme-gruvbox/v1.0.0</code>; aim is to make deployment even more simple</li>
+  <li>[ ] annotation citations</li>
   <li>[ ] syntax highlighting in codeblocks</li>
   <li>[ ] allow template files in sub directories; eg <code>blog/template.html</code></li>
   <li>[ ] easy copy from codeblocks</li>

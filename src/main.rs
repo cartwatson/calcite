@@ -10,7 +10,7 @@ fn main() {
     let content_dir: String = "content/".to_string();
     let template_dir: String = "template/".to_string();
     let template_file: String = "template.html".to_string();
-    let output_dir: String = "out/".to_string();
+    let output_dir: String = "out/".to_string(); // TODO: V1: change to `dist/`
     let template_splitter: String = "<div id=\"content\">".to_string();
 
     // HACK: V1: copy over all non-html files from ./template to ./out
