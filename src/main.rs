@@ -162,8 +162,8 @@ fn paragraph_processer(line: &str) -> String {
         ),
         (
             // https links
-            Regex::new(r"\[(?<text>.*?)\]\((?<link>https:\/\/\S+?)\)").unwrap(),
-            "<a target=\"_blank\" href=\"${link}\">${text}</a> ",
+            Regex::new(r"\[(?<text>[^\[\]]*?)\]\((?<link>https:\/\/\S+?)\)").unwrap(),
+            "<a target=\"_blank\" href=\"${link}\" title=\"${text}\">${text}</a> ",
         ),
         (
             // converts local .md to .html
@@ -172,7 +172,7 @@ fn paragraph_processer(line: &str) -> String {
         ),
         (
             // converts local .html to valid links for the dir
-            Regex::new(r"\[(?<text>.*?)\]\((?<link>\S+?(.md|.html))\)").unwrap(),
+            Regex::new(r"\[(?<text>[^\[\)]*?)\]\((?<link>\S+?(.md|.html))\)").unwrap(),
             "<a href=\"${link}\">${text}</a> ",
         ),
     ];
