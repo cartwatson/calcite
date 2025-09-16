@@ -4,7 +4,7 @@ An intentionally basic static site generator written in rust 🦀 with the help 
 
 ## Why should I use calcite?
 
-Calcite aims to be a middle ground between deploying a basic html website, like one described in the [html hobbyist](https://www.htmlhobbyist.com/), and a complex framework for [hugo](https://gohugo.io/) or [wordpress](https://wordpress.com/). Giving users easy and complete control of their themeing while keeping it separate from their content.  The goal is to leverage knowledge of existing languages (html+css+javascript & markdown) to create an easily extensible site with a theme that's completely in the users control.
+Calcite aims to be a middle ground between deploying a basic html website, like one described in the [html hobbyist](https://www.htmlhobbyist.com/), and deploying a complex framework like [hugo](https://gohugo.io/) or [wordpress](https://wordpress.com/). The goal is to give users complete control of their theming while keeping their content separate.
 
 ## Usage
 
@@ -49,19 +49,83 @@ Template _must_ include `template.html`, this file must contain a `<div id="cont
 
 ## Tool Usage
 
-<!-- TODO: put version number at end of command when available, ie `nix run github:cartwatson/calcite/v1.0.0` -->
+### Nix
+
 Run `nix run github:cartwatson/calcite/v0.0.0` in the directory you setup above
 Remove `v0.0.0` to run with the latest changes
 
 Obligatory [Security Warning](https://determinate.systems/posts/nix-run/#security-warning), the best way to avoid said security issue is to [pin to a version](https://determinate.systems/posts/nix-run/#using-git-revisions-as-a-versioning-mechanism)
 
+### Deploy to Github Pages
+
+1. Create a github pages repo: [github guide](https://docs.github.com/en/pages/quickstart)
+2. Create a file in your repo `.github/workflows/deploy.yml`
+3. Add the below code block to the `.github/workflows/deploy.yml` file
+   - make sure to add a version to `run: nix run github:cartwatson/calcite` if desired
+5. Github will now automatically update your site every time you push more content or change your theme
+
+```yaml
+name: "Build + Deploy with Calcite"
+
+on:
+  push:
+    branches:
+      - gh-pages
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: install nix
+        uses: cachix/install-nix-action@v31
+
+      - name: setup pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Build with calcite
+        run: nix run github:cartwatson/calcite
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+### Other methods
+
+All other methods of install are currently unsupported. It's in the roadmap to generate binaries for Linux and MacOS for future releases.
+
 ## Development
 
-I strongly recommend using [Nix](https://nixos.org/download/) to simplify the build process.
+Using [Nix](https://nixos.org/download/) is the only supported development process.
 
 - use `nix develop` to get all depencies for your editor
 - use `nix build` to build and link to your `/nix/store`, symlinked to `result` in the current dir
-  - `./result/bin/calcite` in the same directory where you have your `template/template.html` and `conent/test.md` files
+  - `./result/bin/calcite` in the same directory where you have your `template/` and `content/` directories
 
 Create a `content/test.md` file. Ideally it includes a variety of md components, including nested components (ie code blocks inside blockquotes). Provided example below
 
@@ -173,4 +237,4 @@ Create a `template/template.html` file as described [here](#site-setup)
 
 ## Naming
 
-Calcite has a PH of 9.91 making it naturally pretty _basic_, also it's a great [minecraft block](https://minecraft.wiki/w/Calcite)
+Calcite has a PH of 9.91 making it naturally pretty _basic_, also it's a great looking [minecraft block](https://minecraft.wiki/w/Calcite)
