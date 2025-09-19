@@ -126,6 +126,7 @@ Using [Nix](https://nixos.org/download/) is the only supported development proce
 - use `nix develop` to get all depencies for your editor
 - use `nix build` to build and link to your `/nix/store`, symlinked to `result` in the current dir
   - `./result/bin/calcite` in the same directory where you have your `template/` and `content/` directories
+- use `nix-shell -p httplz --command "httplz out/"` to serve the site locally (or use your favorite http server)
 
 Create a `content/test.md` file. Ideally it includes a variety of md components, including nested components (ie code blocks inside blockquotes). Provided example below
 
