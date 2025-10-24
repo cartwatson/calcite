@@ -109,12 +109,12 @@ fn image_processer(line: &str) -> String {
         (
             // images - relative
             Regex::new(r"!\[(?<about>.*?)\]\((?<link>.+?)\)").unwrap(),
-            "<img src=\"${link}\" alt=\"${about}\" title=\"${about}\"></img> ",
+            "<img src=\"${link}\" alt=\"${about}\" title=\"${about}\"></img>",
         ),
         (
             // images - web
             Regex::new(r"!\[(?<about>.*?)\]\((?<link>https:\/\/\S+?)\)").unwrap(),
-            "<img src=\"${link}\" alt=\"${about}\" title=\"${about}\"></img> ",
+            "<img src=\"${link}\" alt=\"${about}\" title=\"${about}\"></img>",
         ),
     ];
 
@@ -163,7 +163,7 @@ fn paragraph_processer(line: &str) -> String {
         (
             // https links
             Regex::new(r"\[(?<text>[^\[\]]*?)\]\((?<link>https:\/\/\S+?)\)").unwrap(),
-            "<a target=\"_blank\" href=\"${link}\" title=\"${text}\">${text}</a> ",
+            "<a target=\"_blank\" href=\"${link}\" title=\"${text}\">${text}</a>",
         ),
         (
             // converts local .md to .html
@@ -173,7 +173,7 @@ fn paragraph_processer(line: &str) -> String {
         (
             // converts local .html to valid links for the dir
             Regex::new(r"\[(?<text>[^\[\)]*?)\]\((?<link>\S+?(.md|.html))\)").unwrap(),
-            "<a href=\"${link}\">${text}</a> ",
+            "<a href=\"${link}\">${text}</a>",
         ),
     ];
 
