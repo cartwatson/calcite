@@ -136,7 +136,8 @@ fn heading_processer(line: &str) -> String {
     let heading_level = split_line[0].chars().count();
     split_line.remove(0); // remove ### from front of line
     let heading = split_line.join(" ");
-    let html = format!("<h{heading_level}>{heading}</h{heading_level}>\n");
+    let id = heading.replace(" ", "-").to_lowercase();
+    let html = format!("<h{heading_level} id=\"{id}\">{heading}</h{heading_level}>\n");
     return html;
 }
 
@@ -167,13 +168,13 @@ fn paragraph_processer(line: &str) -> String {
         ),
         (
             // converts local .md to .html
-            Regex::new(r".md\)").unwrap(),
-            ".html)",
+            Regex::new(r"(?<extentsion>\.md)(?<header>#?.*)\)").unwrap(),
+            ".html${header})",
         ),
         (
             // converts local .html to valid links for the dir
-            Regex::new(r"\[(?<text>[^\[\)]*?)\]\((?<link>\S+?(.md|.html))\)").unwrap(),
-            "<a href=\"${link}\">${text}</a>",
+            Regex::new(r"\[(?<text>[^\[\)]*?)\]\((?<link>\S+?(.md|.html))(?<header>#?([a-z]|\d|-)*)\)").unwrap(),
+            "<a href=\"${link}${header}\">${text}</a>",
         ),
     ];
 
